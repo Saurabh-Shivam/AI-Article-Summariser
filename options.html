@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AI Summary Settings</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        max-width: 500px;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .header i {
+        font-size: 48px;
+        color: #667eea;
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      h1 {
+        color: #2d3748;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .subtitle {
+        color: #718096;
+        font-size: 16px;
+        font-weight: 400;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+        position: relative;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2d3748;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .input-wrapper {
+        position: relative;
+      }
+
+      .input-wrapper i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+        font-size: 16px;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 15px 15px 15px 45px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background: #f7fafc;
+        color: #2d3748;
+      }
+
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+      }
+
+      input[type="text"]::placeholder {
+        color: #a0aec0;
+      }
+
+      .help-text {
+        margin-top: 10px;
+        color: #718096;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .help-text a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+
+      .help-text a:hover {
+        color: #764ba2;
+        text-decoration: underline;
+      }
+
+      .save-button {
+        width: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 16px 24px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      .save-button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .save-button:hover::before {
+        left: 100%;
+      }
+
+      .save-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+      }
+
+      .save-button:active {
+        transform: translateY(0);
+      }
+
+      .success-message {
+        background: linear-gradient(135deg, #48bb78, #38a169);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 12px;
+        margin-top: 20px;
+        display: none;
+        text-align: center;
+        font-weight: 600;
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .features {
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .features h3 {
+        color: #2d3748;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+
+      .feature-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #4a5568;
+        font-size: 14px;
+      }
+
+      .feature-item i {
+        color: #48bb78;
+        font-size: 16px;
+        width: 20px;
+      }
+
+      /* Dark mode support */
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        }
+
+        .container {
+          background: rgba(26, 32, 44, 0.95);
+          color: #e2e8f0;
+        }
+
+        h1 {
+          color: #e2e8f0;
+        }
+
+        .subtitle {
+          color: #a0aec0;
+        }
+
+        .form-group label {
+          color: #e2e8f0;
+        }
+
+        input[type="text"] {
+          background: #2d3748;
+          border-color: #4a5568;
+          color: #e2e8f0;
+        }
+
+        input[type="text"]:focus {
+          background: #1a202c;
+          border-color: #667eea;
+        }
+
+        .help-text {
+          color: #a0aec0;
+        }
+
+        .features {
+          border-top-color: #4a5568;
+        }
+
+        .features h3 {
+          color: #e2e8f0;
+        }
+
+        .feature-item {
+          color: #a0aec0;
+        }
+      }
+
+      /* Responsive design */
+      @media (max-width: 600px) {
+        .container {
+          padding: 30px 20px;
+          margin: 10px;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+
+        .header i {
+          font-size: 40px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <i class="fas fa-cog"></i>
+        <h1>AI Summary Settings</h1>
+        <p class="subtitle">Configure your extension preferences</p>
+      </div>
+
+      <div class="form-group">
+        <label for="api-key"> <i class="fas fa-key"></i> Gemini API Key </label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock"></i>
+          <input
+            type="text"
+            id="api-key"
+            placeholder="Enter your Gemini API key here..."
+          />
+        </div>
+        <div class="help-text">
+          <i class="fas fa-info-circle"></i>
+          Get your free API key from
+          <a href="https://makersuite.google.com/app/apikey" target="_blank">
+            Google AI Studio <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+      </div>
+
+      <button id="save-button" class="save-button">
+        <i class="fas fa-save"></i> Save Settings
+      </button>
+
+      <div id="success-message" class="success-message">
+        <i class="fas fa-check-circle"></i> Settings saved successfully!
+      </div>
+
+      <div class="features">
+        <h3><i class="fas fa-star"></i> Features</h3>
+        <div class="feature-list">
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Smart article summarization with AI</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span
+              >Multiple summary formats (Brief, Detailed, Bullet Points)</span
+            >
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>Text-to-speech functionality</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>PDF export capability</span>
+          </div>
+          <div class="feature-item">
+            <i class="fas fa-check"></i>
+            <span>One-click copy to clipboard</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="options.js"></script>
+  </body>
+</html>
